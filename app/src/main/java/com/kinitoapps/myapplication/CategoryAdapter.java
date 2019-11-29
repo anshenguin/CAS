@@ -1,6 +1,7 @@
 package com.kinitoapps.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,31 +15,32 @@ import java.util.List;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     private Context mCtx;
     private List<String> categoryList;
-    private List<FoodItem> foodList;
     MainActivity activity;
-    public CategoryAdapter(Context mCtx, List<String> categoryList, List<FoodItem> foodList) {
+    public CategoryAdapter(Context mCtx, List<String> categoryList) {
         this.mCtx = mCtx;
         this.categoryList = categoryList;
         activity = (MainActivity) mCtx;
-        this.foodList = foodList;
     }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(mCtx);
-        View view = inflater.inflate(R.layout.bigger_item_layout, null);
+        View view = inflater.inflate(R.layout.bigger_item_layout, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        String cat = categoryList.get(i);
+        final String cat = categoryList.get(i);
         viewHolder.textViewCategory.setText(cat);
-        InsideCategoryAdapter adapter;
-        adapter = new InsideCategoryAdapter(mCtx,foodList);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(mCtx);
-        viewHolder.recyclerView.setLayoutManager(mLayoutManager);
-        viewHolder.recyclerView.setAdapter(adapter);
+        viewHolder.textViewCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(mCtx,ListOfFoodActivity.class);
+                i.putExtra("category",cat);
+                mCtx.startActivity(i);
+            }
+        });
 
     }
 
@@ -50,14 +52,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView textViewCategory;
-        RecyclerView recyclerView;
 
          ViewHolder(final View itemView) {
             super(itemView);
 
             textViewCategory = itemView.findViewById(R.id.foodname);
-            recyclerView = itemView.findViewById(R.id.foodRecyclerView);
 //            textViewPrice = itemView.findViewById(R.id.textViewPrice);
         }
     }
+
+
 }

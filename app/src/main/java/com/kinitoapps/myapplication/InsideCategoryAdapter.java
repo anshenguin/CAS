@@ -6,31 +6,34 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 public class InsideCategoryAdapter extends RecyclerView.Adapter<InsideCategoryAdapter.ViewHolder> {
     private Context mCtx;
     private List<FoodItem> categoryList;
-    MainActivity activity;
+    ListOfFoodActivity activity;
     Boolean isAvail;
     int id;
     public InsideCategoryAdapter(Context mCtx, List<FoodItem> categoryList) {
         this.mCtx = mCtx;
         this.categoryList = categoryList;
-        activity = (MainActivity) mCtx;
+        activity = (ListOfFoodActivity) mCtx;
     }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(mCtx);
-        View view = inflater.inflate(R.layout.smaller_item_layout, null);
+        View view = inflater.inflate(R.layout.smaller_item_layout, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         final FoodItem item = categoryList.get(i);
         viewHolder.textViewName.setText(item.getName());
         viewHolder.rate.setText(String.valueOf(item.getPrice()));
@@ -40,6 +43,33 @@ public class InsideCategoryAdapter extends RecyclerView.Adapter<InsideCategoryAd
         else
             isAvail = true;
 
+        viewHolder.plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int amount = Integer.parseInt(viewHolder.amount.getText().toString());
+                if(amount<10){
+                    amount++;
+                    viewHolder.amount.setText(String.valueOf(amount));
+                }
+                else{
+                    Toast.makeText(mCtx, "Limit Exceeded", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        viewHolder.minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int amount = Integer.parseInt(viewHolder.amount.getText().toString());
+                if(amount>0){
+                    amount--;
+                    viewHolder.amount.setText(String.valueOf(amount));
+                }
+                else{
+                    Toast.makeText(mCtx, "Cannot go less than zero", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 
@@ -52,6 +82,8 @@ public class InsideCategoryAdapter extends RecyclerView.Adapter<InsideCategoryAd
 
         TextView textViewName;
         TextView rate;
+        Button plus,minus;
+        TextView amount;
 
 
 
@@ -60,7 +92,10 @@ public class InsideCategoryAdapter extends RecyclerView.Adapter<InsideCategoryAd
 
             textViewName = itemView.findViewById(R.id.item_name);
             rate = itemView.findViewById(R.id.item_price);
-//            textViewPrice = itemView.findViewById(R.id.textViewPrice);
+            plus = itemView.findViewById(R.id.plus_button);
+            minus = itemView.findViewById(R.id.minus_button);
+            amount = itemView.findViewById(R.id.item_quantity);
+            //            textViewPrice = itemView.findViewById(R.id.textViewPrice);
         }
     }
 }
