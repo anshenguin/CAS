@@ -1,6 +1,7 @@
 package com.kinitoapps.myapplication;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class InsideCategoryAdapter extends RecyclerView.Adapter<InsideCategoryAdapter.ViewHolder> {
@@ -42,7 +44,19 @@ public class InsideCategoryAdapter extends RecyclerView.Adapter<InsideCategoryAd
             isAvail = false;
         else
             isAvail = true;
-
+        DBManager db = new DBManager(mCtx);
+        try {
+            db.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if(db.doesExist(item.getId())==0)
+            viewHolder.amount.setText("0");
+        else {
+            int x =db.countAmount(id);
+            viewHolder.amount.setText(String.valueOf(x));
+        }
+        db.close();
         viewHolder.plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,6 +64,17 @@ public class InsideCategoryAdapter extends RecyclerView.Adapter<InsideCategoryAd
                 if(amount<10){
                     amount++;
                     viewHolder.amount.setText(String.valueOf(amount));
+                    DBManager dbManager = new DBManager(mCtx);
+                    try {
+                        dbManager.open();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    if((amount-1)>0)
+                    dbManager.update(amount,item.getId());
+                    else
+                    dbManager.insert(item.getName(),item.getId(),amount,item.getPrice());
+                    dbManager.close();
                 }
                 else{
                     Toast.makeText(mCtx, "Limit Exceeded", Toast.LENGTH_SHORT).show();
@@ -64,6 +89,19 @@ public class InsideCategoryAdapter extends RecyclerView.Adapter<InsideCategoryAd
                 if(amount>0){
                     amount--;
                     viewHolder.amount.setText(String.valueOf(amount));
+                    DBManager dbManager = new DBManager(mCtx);
+                    try {
+                        dbManager.open();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    if(amount!=0)
+                    dbManager.update(amount,item.getId());
+                    else
+                        dbManager.delete(item.getId());
+                    dbManager.close();
+
+
                 }
                 else{
                     Toast.makeText(mCtx, "Cannot go less than zero", Toast.LENGTH_SHORT).show();

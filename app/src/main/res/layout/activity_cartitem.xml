@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:textSize="16sp"
+        android:layout_margin="8dp"
+        android:id="@+id/cartitemname"
+        android:textStyle="bold"
+        android:text="Paneer Malai maarke"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="4dp"
+        android:textSize="16sp"
+        android:text=" x "
+        android:id="@+id/ex"
+        app:layout_constraintLeft_toRightOf="@id/cartitemname"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_marginTop="8dp"
+        android:id="@+id/cartitemamount"
+        android:textSize="16sp"
+        android:text="20"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/ex"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:textSize="14sp"
+        android:text="Rs. 50"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/cartitemprice"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cartitemname"/>
+
+</android.support.constraint.ConstraintLayout>
